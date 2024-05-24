@@ -129,16 +129,21 @@
         android:textStyle="bold"
         android:text="Location:" />
 
-    <EditText
-        android:id="@+id/locationText"
+    <fragment android:id="@+id/autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:layout_margin="5dp" />
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        />
 
     <Button
         android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="GetCurrentLocation"
+        android:text="Get Current Location" />
+
+    <Button
+        android:id="@+id/button5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="Submit"

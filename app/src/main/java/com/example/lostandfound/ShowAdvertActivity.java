@@ -31,7 +31,7 @@ public class ShowAdvertActivity extends AppCompatActivity {
         titleText.setText(advert.getType() + " " + advert.getName());
 
         TextView locationText = findViewById(R.id.textLocation);
-        locationText.setText("At " + advert.getLocation());
+        locationText.setText("At " + advert.getLocation().getName());
 
         TextView timeText = findViewById(R.id.textTime);
         timeText.setText(getRelativeTimeSpanString(advert.getDate().getTime()));

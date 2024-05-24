@@ -7,7 +7,7 @@ import java.util.Date;
 public class Advert {
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
-    public Advert(String id, String name, String phone, String description, String date, String location, String type)
+    public Advert(String id, String name, String phone, String description, String date, Location location, String type)
     {
         this.id = id;
         this.name = name;
@@ -22,7 +22,7 @@ public class Advert {
         }
     }
 
-    public Advert(String name, String phone, String description, Date date, String location, String type) {
+    public Advert(String name, String phone, String description, Date date, Location location, String type) {
         this.id = System.currentTimeMillis()+"";
         this.name = name;
         this.phone = phone;
@@ -72,11 +72,11 @@ public class Advert {
         this.date = date;
     }
 
-    private String location;
-    public String getLocation() {
+    private Location location;
+    public Location getLocation() {
         return location;
     }
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

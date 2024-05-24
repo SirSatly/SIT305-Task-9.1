@@ -16,13 +16,13 @@ public class AdvertDatabase extends SQLiteOpenHelper {
 
     public AdvertDatabase(Context context)
     {
-        super(context, DB_NAME, null, 2);
+        super(context, DB_NAME, null, 3);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String sqlDB = "CREATE TABLE adverts (id TEXT PRIMARY KEY, name TEXT, phone TEXT, description TEXT, date TEXT, location TEXT, type TEXT)";
+        String sqlDB = "CREATE TABLE adverts (id TEXT PRIMARY KEY, name TEXT, phone TEXT, description TEXT, date TEXT, location TEXT, longitude DOUBLE, latitude DOUBLE, type TEXT)";
         db.execSQL(sqlDB);
     }
 
@@ -43,7 +43,9 @@ public class AdvertDatabase extends SQLiteOpenHelper {
         cal.put("phone", advert.getPhone());
         cal.put("description", advert.getDescription());
         cal.put("date", advert.getDateString());
-        cal.put("location", advert.getLocation());
+        cal.put("location", advert.getLocation().getName());
+        cal.put("longitude", advert.getLocation().getLongitude());
+        cal.put("latitude", advert.getLocation().getLatitude());
         cal.put("type", advert.getType());
 
         long rowId = sql_DB.insert(TABLE_NAME, null, cal);
@@ -57,32 +59,6 @@ public class AdvertDatabase extends SQLiteOpenHelper {
         else
         {
             System.out.println("Insert Failed | Error");
-            return false;
-        }
-    }
-
-    public Boolean updateAdvert(Advert advert)
-    {
-        SQLiteDatabase sql_DB = getWritableDatabase();
-        ContentValues cal = new ContentValues();
-        cal.put("name", advert.getName());
-        cal.put("phone", advert.getPhone());
-        cal.put("description", advert.getDescription());
-        cal.put("date", advert.getDateString());
-        cal.put("location", advert.getLocation());
-        cal.put("type", advert.getType());
-
-        long rowId = sql_DB.update(TABLE_NAME, cal, "id=?", new String[]{advert.getId()});
-        sql_DB.close();
-
-        if (rowId > -1)
-        {
-            System.out.println("Advert Updated" + rowId);
-            return true;
-        }
-        else
-        {
-            System.out.println("Update Failed | Error");
             return false;
         }
     }
@@ -107,13 +83,14 @@ public class AdvertDatabase extends SQLiteOpenHelper {
     public Advert getAdvert(String id)
     {
         SQLiteDatabase sql_DB = this.getReadableDatabase();
-        Cursor query = sql_DB.query(TABLE_NAME, new String[] {"id", "name", "phone", "description", "date", "location", "type"},
+        Cursor query = sql_DB.query(TABLE_NAME, new String[] {"id", "name", "phone", "description", "date", "location", "longitude", "latitude", "type"},
                 "id=?", new String[]{id}, null, null, null, null);
         if (query != null)
         {
             query.moveToFirst();
         }
-        Advert advert = new Advert(query.getString(0), query.getString(1), query.getString(2), query.getString(3), query.getString(4),query.getString(5), query.getString(6));
+        Location location = new Location(query.getString(5), query.getInt(6), query.getInt(7));
+        Advert advert = new Advert(query.getString(0), query.getString(1), query.getString(2), query.getString(3), query.getString(4), location, query.getString(8));
         query.close();
         sql_DB.close();
         return advert;
@@ -126,7 +103,15 @@ public class AdvertDatabase extends SQLiteOpenHelper {
 
         while(query.moveToNext())
         {
-            result.add(new Advert(query.getString(0), query.getString(1), query.getString(2), query.getString(3), query.getString(4),query.getString(5), query.getString(6)));
+            result.add(new Advert(
+                query.getString(0),
+                query.getString(1),
+                query.getString(2),
+                query.getString(3),
+                query.getString(4),
+                new Location(query.getString(5), query.getDouble(6), query.getDouble(7)),
+                query.getString(8)
+            ));
         }
         query.close();
         sql_DB.close();

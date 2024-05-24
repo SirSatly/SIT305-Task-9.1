@@ -7,6 +7,9 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void ViewAdverts(View view) {
         Intent intent = new Intent(this, ViewAdvertsActivity.class);
+        startActivity(intent);
+    }
+
+    public void MapAdverts(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 }
